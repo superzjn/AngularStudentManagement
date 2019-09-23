@@ -6,6 +6,7 @@ import { LoginModalService, Principal, Account } from 'app/core';
 import { CourseService } from 'app/shared/service/CourseService';
 import { CourseDto } from 'app/shared/model/course-dto.model';
 import { CourseWithTNDto } from 'app/shared/model/courseWithTN-dto.model';
+import { Course } from 'app/shared/model/course.model';
 
 @Component({
     selector: 'jhi-home',
@@ -16,6 +17,8 @@ export class HomeComponent implements OnInit {
     account: Account;
     modalRef: NgbModalRef;
     classeNameNeedToReg: string;
+    courses: CourseDto[] = [];
+    coursesWithTN: CourseWithTNDto[] = [];
 
     constructor(
         private principal: Principal,
@@ -23,10 +26,6 @@ export class HomeComponent implements OnInit {
         private eventManager: JhiEventManager,
         private courseService: CourseService
     ) {}
-
-    courses: CourseDto[] = [];
-
-    coursesWithTN: CourseWithTNDto[] = [];
 
     ngOnInit() {
         this.principal.identity().then(account => {
@@ -52,7 +51,6 @@ export class HomeComponent implements OnInit {
     }
 
     getAllCourses() {
-        debugger;
         this.courseService.getCourseInfo().subscribe(curDto => {
             if (!curDto) {
                 this.courses = [];
@@ -72,16 +70,26 @@ export class HomeComponent implements OnInit {
         });
     }
 
+    deleteCourse(courseName: String) {
+        this.courseService.deleteCourse(courseName).subscribe();
+    }
+
+    createCourse(courseName: string, courseLocation: string, courseContent: string, courseTeacher: number) {
+        this.courseService.createCourse(new Course(courseName, courseLocation, courseContent, courseTeacher)).subscribe();
+    }
+
     // registerCourse(courseName) {
     //
     // }
 
     clearAllCourses() {
         this.courses = [];
+        this.coursesWithTN = [];
     }
 
-    addCourseToStudent() {
-        const courseName = 'temp';
-        this.courseService.addCourseToStudent(courseName, currentUserCredential);
-    }
+    // addCourseToStudent() {
+    //     const courseName = 'temp';
+    //     this.courseService.addCourseToStudent(courseName, currentUserCredential);
+    // }
+    addCourseToStudent() {}
 }

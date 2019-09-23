@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { CourseDto } from 'app/shared/model/course-dto.model';
 import { SERVER_API_URL } from 'app/app.constants';
 import { CourseWithTNDto } from 'app/shared/model/courseWithTN-dto.model';
+import { Course } from 'app/shared/model/course.model';
 
 @Injectable()
 export class CourseService {
@@ -16,7 +17,6 @@ export class CourseService {
     constructor(private http: HttpClient) {}
 
     getCourseInfo(): Observable<CourseDto[]> {
-        debugger;
         return this.http.get<CourseDto[]>(`${this.courseAddressUrl}`);
     }
 
@@ -24,8 +24,13 @@ export class CourseService {
         return this.http.get<CourseWithTNDto[]>(`${this.courseAddressWithTNUrl}`);
     }
 
-    delete(courseName: String): Observable<Response> {
+    deleteCourse(courseName: String): Observable<Response> {
         return this.http.delete<Response>(`${this.courseDeleteUrl}/${courseName}`);
+    }
+
+    createCourse(newCourse: Course) {
+        console.log(newCourse);
+        return this.http.post<Course>(SERVER_API_URL + '/api/course/createCourse', newCourse);
     }
 
     update(course: CourseDto): Observable<Response> {

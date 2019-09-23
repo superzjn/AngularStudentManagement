@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:9000")
 @RequestMapping
 @Api(value="Course Service Controller", description = "Controller for find couses information")
 public class CourseController {
@@ -24,7 +25,6 @@ public class CourseController {
 
     @GetMapping(path = "/api/course/findAllCourses", produces = "application/json")
     public HttpEntity<List<CourseDto>> findAllCourses(){
-
         List<CourseDto> allCourses = courseService.findAllCourses();
 
         return new ResponseEntity<>(allCourses, HttpStatus.OK);
@@ -54,7 +54,7 @@ public class CourseController {
         }
     }
 
-    @PostMapping(path = "/api/course/addCourse", produces = "application/json")
+    @PostMapping("/api/course/addCourse")
     public HttpStatus addCourse(@RequestBody @NotNull CourseDto course) {
         try {
             courseService.addCourse(course);
@@ -74,9 +74,10 @@ public class CourseController {
         }
     }
 
-    @PostMapping(path = "/api/course/createCourse", produces = "application/json")
+    @PostMapping(path = "/api/course/createCourse")
     public HttpStatus createCourse(@RequestBody @NotNull CourseDto course) {
         try {
+            System.out.println(course);
             courseService.addCourse(course);
             return HttpStatus.OK;
         } catch (Exception e) {
@@ -84,7 +85,7 @@ public class CourseController {
         }
     }
 
-    @DeleteMapping(path = "/api/course/deleteCourse/{courseName}", produces = "application/js")
+    @DeleteMapping(path = "/api/course/deleteCourse/{courseName}", produces = "application/json")
     public HttpStatus deleteCourse(@NotNull @PathVariable("courseName") String courseName) {
         try {
             courseService.deleteCourse(courseName);
@@ -94,13 +95,14 @@ public class CourseController {
         }
     }
 
-    @PostMapping(path = "/api/course/addCourseToStudent/{courseName}", produces = "application/js")
-    public HttpStatus addCourseToStudent(@NotNull @PathVariable("courseName") UserCourse userCourse) {
-        try {
-            courseService.addCourseToStudent(userCourse);
-            return HttpStatus.OK;
-        } catch (Exception e) {
-            return HttpStatus.BAD_REQUEST;
-        }
-    }
+
+//    @PostMapping(path = "/api/course/addCourseToStudent/{courseName}", produces = "application/js")
+//    public HttpStatus addCourseToStudent(@NotNull @PathVariable("courseName") UserCourse userCourse) {
+//        try {
+//            courseService.addCourseToStudent(userCourse);
+//            return HttpStatus.OK;
+//        } catch (Exception e) {
+//            return HttpStatus.BAD_REQUEST;
+//        }
+//    }
 }

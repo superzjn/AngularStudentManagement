@@ -70,9 +70,26 @@ export class HomeComponent implements OnInit {
         });
     }
 
+    getAllCoursesOfUser(userId: String) {
+        this.courseService.getCourseForUser(userId).subscribe(curDto => {
+            if (!curDto) {
+                this.courses = [];
+            } else {
+                this.courses = curDto;
+            }
+        });
+    }
+
     deleteCourse(courseName: String) {
         this.courseService.deleteCourse(courseName).subscribe(response => {
             this.getAllCourses();
+        });
+    }
+
+    addCourseToStudent(courseName: String, userId: String) {
+        this.courseService.addCourseToStudent(courseName, userId).subscribe(response => {
+            this.getAllCoursesOfUser(userId);
+            //TODO successfull added message
         });
     }
 
@@ -82,18 +99,11 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    // registerCourse(courseName) {
-    //
-    // }
-
     clearAllCourses() {
         this.courses = [];
-        this.coursesWithTN = [];
     }
 
-    // addCourseToStudent() {
-    //     const courseName = 'temp';
-    //     this.courseService.addCourseToStudent(courseName, currentUserCredential);
-    // }
-    addCourseToStudent() {}
+    clearAllRegisteredCourses() {
+        this.coursesWithTN = [];
+    }
 }

@@ -24,6 +24,11 @@ export class CourseService {
         return this.http.get<CourseWithTNDto[]>(`${this.courseAddressWithTNUrl}`);
     }
 
+    getCourseForUser(userId: String): Observable<CourseDto[]> {
+        return this.http.get<CourseDto[]>(`${this.courseAddressUrl}`);
+        // TODO change controller url
+    }
+
     deleteCourse(courseName: String): Observable<Response> {
         return this.http.delete<Response>(`${this.courseDeleteUrl}/${courseName}`);
     }
@@ -37,7 +42,7 @@ export class CourseService {
         return this.http.put<Response>(this.courseUpdateUrl, course);
     }
 
-    addCourseToStudent(courseName: String, currentUserCredential: String) {
-        return this.http.post(SERVER_API_URL + '/api/course/addCourseToStudent', { courseName, currentUserCredential });
+    addCourseToStudent(courseName: String, userId: String) {
+        return this.http.post(SERVER_API_URL + '/api/course/addCourseToStudent', { courseName, userId });
     }
 }

@@ -5,6 +5,7 @@ import com.mycompany.myapp.domain.dto.CourseDto;
 import com.mycompany.myapp.domain.dto.CourseWithTNDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Cacheable;
@@ -23,6 +24,10 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT new com.mycompany.myapp.domain.dto.CourseWithTNDto(c.courseName, c.courseLocation, c.courseContent, u.login) from Course c left join User u on c.teacherId = u.id")
     List<CourseWithTNDto> findAllCoursesDtoWithTeacherName();
 
-    Optional<Course> findCourseByCourseName(String courseName);
+    @Query("SELECT c.id from Course c WHERE c.courseName = :courseName")
+    long findCourseIdByName(@Param("courseName") String courseName);
+
+    @Query("SELECT new com.mycompany.myapp.domain.Course(c.courseName, c.courseLocation, c.courseContent, c.teacherId) from Course c WHERE c.courseName = :courseName")
+    Optional<Course> findCourseByCourseName(@Param("courseName") String courseName);
 
 }

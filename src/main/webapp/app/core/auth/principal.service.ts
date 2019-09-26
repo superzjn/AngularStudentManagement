@@ -66,6 +66,7 @@ export class Principal {
             .toPromise()
             .then(response => {
                 const account = response.body;
+
                 if (account) {
                     this.userIdentity = account;
                     this.authenticated = true;

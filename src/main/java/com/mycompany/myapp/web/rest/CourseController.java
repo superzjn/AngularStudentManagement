@@ -1,7 +1,9 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Course;
+import com.mycompany.myapp.domain.UserCourse;
 import com.mycompany.myapp.domain.dto.CourseDto;
+import com.mycompany.myapp.domain.dto.CourseRegister;
 import com.mycompany.myapp.domain.dto.CourseWithTNDto;
 import com.mycompany.myapp.service.CourseService;
 import io.swagger.annotations.Api;
@@ -18,7 +20,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "http://localhost:9000")
 @RequestMapping
-@Api(value="Course Service Controller", description = "Controller for find couses information")
+@Api(value="Course Service Controller", description = "Controller for find courses information")
 public class CourseController {
     @Autowired
     private CourseService courseService;
@@ -95,14 +97,13 @@ public class CourseController {
         }
     }
 
-
-//    @PostMapping(path = "/api/course/addCourseToStudent/{courseName}", produces = "application/js")
-//    public HttpStatus addCourseToStudent(@NotNull @PathVariable("courseName") UserCourse userCourse) {
-//        try {
-//            courseService.addCourseToStudent(userCourse);
-//            return HttpStatus.OK;
-//        } catch (Exception e) {
-//            return HttpStatus.BAD_REQUEST;
-//        }
-//    }
+    @PostMapping(path = "/api/course/addCourseToStudent", produces = "application/json")
+    public HttpStatus addCourseToStudent(@RequestBody @NotNull CourseRegister register) {
+        try {
+            courseService.addCourseToStudent(register);
+            return HttpStatus.OK;
+        } catch (Exception e) {
+            return HttpStatus.BAD_REQUEST;
+        }
+    }
 }

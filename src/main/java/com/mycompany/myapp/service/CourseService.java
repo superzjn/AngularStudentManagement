@@ -8,6 +8,7 @@ import com.mycompany.myapp.domain.dto.CourseRegister;
 import com.mycompany.myapp.domain.dto.CourseWithTNDto;
 import com.mycompany.myapp.repository.CourseRepository;
 import com.mycompany.myapp.repository.UserCourseRepository;
+import com.mycompany.myapp.repository.UserRepository;
 import org.checkerframework.checker.units.qual.A;
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +29,9 @@ public class CourseService {
 
     @Autowired
     private UserCourseRepository userCourseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -58,6 +63,25 @@ public class CourseService {
         return courseRepository.findAllCoursesDtoWithTeacherName();
     }
 
+    public List<CourseDto> getAllCourseForUser(String userId) {
+
+        Optional<User> user = userRepository.findById(Long.parseLong(userId));
+        List<UserCourse> userCourse = userCourseRepository.findByUser(user.get());
+        List<CourseDto> result = new ArrayList<>();
+
+        Iterator<UserCourse> iterator = userCourse.iterator();
+
+        while(iterator.hasNext()) {
+            Course course = iterator.next().getCourse();
+            CourseDto crDto = CourseDto.builder().courseName(course.getCourseName())
+                .courseContent(course.getCourseContent())
+                .courseLocation(course.getCourseLocation())
+                .teacherId(course.getTeacherId())
+                .build();
+            result.add(crDto);
+        }
+        return result;
+    }
 
     public void registerCourse(String courseName) throws Exception {
         Optional<User> curUser = userService.getUserWithAuthorities();
@@ -71,6 +95,8 @@ public class CourseService {
         } else {
             throw new Exception("UnExpected Exception");
         }
+
+        //TODO move AddCourseToStudent to here
     }
 
     public void addCourse(CourseDto course) throws Exception {

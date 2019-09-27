@@ -13,6 +13,7 @@ export class CourseService {
     private courseDeleteUrl = SERVER_API_URL + '/api/course/deleteCourse';
     private courseUpdateUrl = SERVER_API_URL + '/api/course/updateCourse';
     private addCourseToStudentUrl = SERVER_API_URL + '/api/course/addCourseToStudent';
+    private showUserCourseUrl = SERVER_API_URL + 'api/course/getUserCourse';
 
     constructor(private http: HttpClient) {}
 
@@ -25,8 +26,7 @@ export class CourseService {
     }
 
     getCourseForUser(userId: String): Observable<CourseDto[]> {
-        return this.http.get<CourseDto[]>(`${this.courseAddressUrl}`);
-        // TODO change controller url
+        return this.http.get<CourseDto[]>(`${this.showUserCourseUrl}/${userId}`);
     }
 
     deleteCourse(courseName: String): Observable<Response> {

@@ -46,6 +46,12 @@ public class CourseController {
         return new ResponseEntity<>(allCourses, HttpStatus.OK);
     }
 
+    @GetMapping(path = "api/course/getUserCourse/{userId}", produces = "application/json")
+    public HttpEntity<List<CourseDto>> getUserCoursesDto(@PathVariable String userId) {
+        List<CourseDto> userCourse = courseService.getAllCourseForUser(userId);
+        return new ResponseEntity<>(userCourse, HttpStatus.OK);
+    }
+
     @PostMapping(path = "/api/course/registerCourse/{courseName}", produces = "application/json")
     public HttpStatus registerCourse(@PathVariable String courseName) {
         try {

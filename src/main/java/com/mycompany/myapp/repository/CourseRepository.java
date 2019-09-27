@@ -1,6 +1,7 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Course;
+import com.mycompany.myapp.domain.UserCourse;
 import com.mycompany.myapp.domain.dto.CourseDto;
 import com.mycompany.myapp.domain.dto.CourseWithTNDto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Cacheable;
 import java.util.List;
 import java.util.Optional;
+
+import static org.hibernate.loader.Loader.SELECT;
 
 
 @Repository
@@ -27,7 +30,5 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT c.id from Course c WHERE c.courseName = :courseName")
     long findCourseIdByName(@Param("courseName") String courseName);
 
-    @Query("SELECT new com.mycompany.myapp.domain.Course(c.courseName, c.courseLocation, c.courseContent, c.teacherId) from Course c WHERE c.courseName = :courseName")
-    Optional<Course> findCourseByCourseName(@Param("courseName") String courseName);
-
+    Optional<Course> findCourseByCourseName(String courseName);
 }

@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit {
     classeNameNeedToReg: string;
     courses: CourseDto[] = [];
     coursesWithTN: CourseWithTNDto[] = [];
+    userCourses: CourseDto[] = [];
 
     constructor(
         private principal: Principal,
@@ -73,15 +74,18 @@ export class HomeComponent implements OnInit {
     getAllCoursesOfUser(userId: String) {
         this.courseService.getCourseForUser(userId).subscribe(curDto => {
             if (!curDto) {
-                this.courses = [];
+                this.userCourses = [];
             } else {
-                this.courses = curDto;
+                this.userCourses = curDto;
             }
         });
     }
 
     deleteCourse(courseName: String) {
         this.courseService.deleteCourse(courseName).subscribe(response => {
+            // TODO delete fail when "2019-09-27 11:35:47.751 ERROR 70227 --- [ XNIO-2 task-22] o.h.engine.jdbc.spi.SqlExceptionHelper
+            // : Cannot delete or update a parent row: a foreign key constraint fails (`jiuzhangquanzhanke`.`user_course`, CONSTRAINT `FK_course_id_course_id`
+            // FOREIGN KEY (`course_id`) REFERENCES `course` (`id`))
             this.getAllCourses();
         });
     }
@@ -89,7 +93,7 @@ export class HomeComponent implements OnInit {
     addCourseToStudent(courseName: String, userId: String) {
         this.courseService.addCourseToStudent(courseName, userId).subscribe(response => {
             this.getAllCoursesOfUser(userId);
-            //TODO successfull added message
+            //     TODO successful & failure message
         });
     }
 
@@ -104,6 +108,6 @@ export class HomeComponent implements OnInit {
     }
 
     clearAllRegisteredCourses() {
-        this.coursesWithTN = [];
+        this.userCourses = [];
     }
 }
